@@ -3,7 +3,7 @@ Read YAML configs from well-known locations
 
 ## Motivation
 
-JS micro-services require a configuration. As this is such a common problem this package unifies this tasks by providing a standard interface for loading configurations from well-known locations. 
+Most JS micro-services require a configuration. This package unifies this common task by providing a standard interface for loading configurations from well-known locations.
 
 ## Getting started
 
