@@ -1,0 +1,29 @@
+{
+  "name": "@phish108/yaml-configurator",
+  "version": "1.0.0",
+  "description": "handler for loading YAML configuration files",
+  "main": "src/index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phish108/yaml-configurator.git"
+  },
+  "keywords": [
+    "yaml",
+    "configuration",
+    "config",
+    "config",
+    "loader"
+  ],
+  "author": "Christian Glahn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phish108/yaml-configurator/issues"
+  },
+  "homepage": "https://github.com/phish108/yaml-configurator#readme",
+  "dependencies": {
+    "yaml": "2.2.2"
+  }
+}
