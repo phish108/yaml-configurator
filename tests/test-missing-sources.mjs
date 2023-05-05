@@ -42,7 +42,7 @@ describe("Test config reader with missing sources", async () => {
                 throw e;
             }
 
-            assert.strictEqual(e.message, "missing configuration for attribute: bar");
+            assert.strictEqual(e.message, "missing configuration for key: bar");
         }
     });
 
@@ -59,7 +59,7 @@ describe("Test config reader with missing sources", async () => {
                 throw e;
             }
 
-            assert.strictEqual(e.message, "missing configuration for attribute: foo");
+            assert.strictEqual(e.message, "missing configuration for key: foo");
         }
     });
 });

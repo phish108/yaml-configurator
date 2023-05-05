@@ -58,7 +58,7 @@ describe("Test config reader file selection", async () => {
                 throw e;
             }
 
-            assert.strictEqual(e.message, "missing configuration for attribute: baz");
+            assert.strictEqual(e.message, "missing configuration for key: baz");
         }
     });
 
@@ -71,7 +71,7 @@ describe("Test config reader file selection", async () => {
                 throw e;
             }
 
-            assert.strictEqual(e.message, "missing configuration for attribute: baz");
+            assert.strictEqual(e.message, "missing configuration for key: baz");
         }
     });
 });

@@ -77,7 +77,7 @@ function mergeConfig(config, defaults = {}) {
 function verifyConfig(config, keys = []) {
     keys.forEach((k) => { 
         if (!(k in config)) {
-            throw new Error(`missing configuration for attribute: ${k}`);
+            throw new Error(`missing configuration for key: ${k}`);
         }
     });
     return config;
