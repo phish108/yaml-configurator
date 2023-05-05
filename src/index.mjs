@@ -22,7 +22,6 @@ export async function readConfig(locations, keys = [], defaults = {}) {
     const file = locs.filter((e) => e !== undefined).shift();
 
     if (file === undefined) {
-        console.log(`${JSON.stringify({module: __filename, message: "No config files, return defaults"})}`);
         return defaults;
     }
 
@@ -35,14 +34,14 @@ export async function readConfig(locations, keys = [], defaults = {}) {
     }
     catch (err) {
         console.log(`${JSON.stringify({
-            module: __filename,
             message: "cannot read file",
-            extra: err.message})}`);
+            extra: err.message
+        })}`);
     }
 
     if (!result) {
-        console.log(`${JSON.stringify({module: __filename, message: "Empty config, return defaults"})}`);
-        result = defaults;
+        console.log(`${JSON.stringify({message: "Empty config, return defaults"})}`);
+        return defaults;
     }
 
     result = keys.reduce((acc, k) => {
