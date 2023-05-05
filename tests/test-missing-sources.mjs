@@ -34,7 +34,32 @@ describe("Test single config reader", async () => {
      * defaults and extra keys
      */
     it("Empty sources with defaults and extra keys", async () => {
-        const result = await readConfig([], ["foo", "bar"], {foo: "bar"});
-        assert.deepEqual(result, {foo: "bar", bar: undefined});
+        try {
+            const result = await readConfig([], ["foo", "bar"], {foo: "bar"});
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for attribute: bar");
+        }
+    });
+
+    /**
+     * Test the readConfig function with empty sources and no defaults but expects keys
+     * to be present
+     */
+    it("Empty sources with no defaults and keys", async () => {
+        try {
+            const result = await readConfig([], ["foo"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for attribute: foo");
+        }
     });
 });

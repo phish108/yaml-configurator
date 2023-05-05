@@ -1,6 +1,5 @@
 import YAML from "yaml";
 import fs from "fs/promises";
-// const fs = require("node:fs/promises");
 
 export async function readConfig(locations, keys = [], defaults = {}) {
     let result = {};
@@ -19,10 +18,19 @@ export async function readConfig(locations, keys = [], defaults = {}) {
             .catch(() => undefined))
     );
 
-    const file = locs.filter((e) => e !== undefined).shift();
+    const filename = locs.filter((e) => e !== undefined).shift();
 
-    if (file === undefined) {
-        return defaults;
+    const config = await loadConfig(filename);
+ 
+    result = mergeConfig(config, defaults);
+    return verifyConfig(result, keys);
+}
+
+async function loadConfig(source) {
+    let result = {};
+
+    if (!source) {
+        return result;
     }
 
     try {
@@ -39,18 +47,38 @@ export async function readConfig(locations, keys = [], defaults = {}) {
         })}`);
     }
 
-    if (!result) {
-        console.log(`${JSON.stringify({message: "Empty config, return defaults"})}`);
+    return result;
+}
+
+function mergeConfig(config, defaults = {}) {
+    if (!defaults) {
+        defaults = {};
+    }
+
+    if (!config || typeof config !== "object" || Object.keys(config).length === 0) {
         return defaults;
     }
 
-    result = keys.reduce((acc, k) => {
+    const keys = Object.keys(defaults);
+
+    if (keys.length === 0) {
+        return config;
+    }
+
+    return keys.reduce((acc, k) => {
         if (!(k in acc)) {
             acc[k] = defaults[k];
         }
         
         return acc; 
-    }, result)
+    }, config);
+}
 
-    return result;
+function verifyConfig(config, keys = []) {
+    keys.forEach((k) => { 
+        if (!(k in config)) {
+            throw new Error(`missing configuration for attribute: ${k}`);
+        }
+    });
+    return config;
 }
