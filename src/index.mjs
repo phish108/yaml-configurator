@@ -20,21 +20,21 @@ export async function readConfig(locations, keys = [], defaults = {}) {
 
     const filename = locs.filter((e) => e !== undefined).shift();
 
-    const config = await loadConfig(filename);
- 
-    result = mergeConfig(config, defaults);
+    result = await loadConfig(filename);
+    result = mergeConfig(result, defaults);
+
     return verifyConfig(result, keys);
 }
 
 async function loadConfig(source) {
     let result = {};
 
-    if (!source) {
+    if (!source || typeof source !== "string" || source.length === 0) {
         return result;
     }
 
     try {
-        const cfgdata = await fs.readFile(file, "utf-8");
+        const cfgdata = await fs.readFile(source, "utf-8");
 
         if (cfgdata !== undefined) {
             result = YAML.parse(cfgdata);

@@ -3,7 +3,7 @@ import {describe, it} from "node:test";
 import {readConfig} from "../src/index.mjs";
 import assert from 'node:assert/strict';
 
-describe("Test single config reader", async () => {
+describe("Test config reader with missing sources", async () => {
     /**
      * Test the readConfig function with empty sources
      */
