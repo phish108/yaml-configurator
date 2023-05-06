@@ -74,11 +74,26 @@ function mergeConfig(config, defaults = {}) {
     }, config);
 }
 
+function keycheck(config, key) {
+    if (typeof config !== "object" || config === null || config === undefined) {
+        throw new Error(`missing configuration object for key: ${key}})`);
+    }
+
+    if (!(key in config && config[key] !== undefined && config[key] !== null || config[key] === "")) {
+        throw new Error(`missing configuration for key: ${key}`);
+    }
+
+    return config[key];
+}
+
 function verifyConfig(config, keys = []) {
-    keys.forEach((k) => { 
-        if (!(k in config)) {
-            throw new Error(`missing configuration for key: ${k}`);
-        }
-    });
-    return config;
+    return keys.reduce((cfg, k) => { 
+        const klist = k.split(".");
+
+        klist.reduce((c, subkey) => {    
+            return keycheck(c, subkey);
+        }, cfg); 
+
+        return cfg;
+    }, config);
 }
