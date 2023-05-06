@@ -90,9 +90,17 @@ function verifyConfig(config, keys = []) {
     return keys.reduce((cfg, k) => { 
         const klist = k.split(".");
 
-        klist.reduce((c, subkey) => {    
-            return keycheck(c, subkey);
-        }, cfg); 
+        try {
+            klist.reduce((c, subkey) => {    
+                return keycheck(c, subkey);
+            }, cfg); 
+        }
+        catch (err) {
+            if (klist.length > 1) {
+                throw new Error(`${err.message} (in ${k})`);
+            }
+            throw err;
+        }
 
         return cfg;
     }, config);

@@ -29,4 +29,105 @@ describe("Test config reader with nested key checks", async () => {
         const result = await readConfig(config, ["bar.dive.foo"]);
         assert.deepStrictEqual(result, fileContent);
     });
+
+    /**
+     * Test missing keys on first level with existing parent
+     */
+    it(" missing keys on first level with existing parent", async () => {
+        try {
+            const result = await readConfig(config, ["bar.baz_deep"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for key: baz_deep (in bar.baz_deep)");
+        }
+    });
+
+    /**
+     * Test missing keys on first level with missing parent
+     */
+    it(" missing keys on first level with missing parent", async () => {
+        try {
+            const result = await readConfig(config, ["baZ.baz_deep"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for key: baZ (in baZ.baz_deep)");
+        }
+    });
+
+
+    /**
+     * Test missing keys on second level
+     */
+    it("missing key on second level", async () => {
+        try {
+            const result = await readConfig(config, ["bar.dive.bar"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for key: bar (in bar.dive.bar)");
+        }
+    });
+
+    it("missing key on second level with existing subling", async () => {
+        try {
+            const result = await readConfig(config, ["bar.dive.foo", "bar.dive.bar"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for key: bar (in bar.dive.bar)");
+        }
+    });
+
+    it("missing key on second level with missing parent", async () => {
+        try {
+            const result = await readConfig(config, ["bar.drive.foo", "bar.dive.bar"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for key: drive (in bar.drive.foo)");
+        }
+    });
+
+    it("missing key on second level with missing root", async () => {
+        try {
+            const result = await readConfig(config, ["baZ.drive.foo", "bar.dive.bar"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration for key: baZ (in baZ.drive.foo)");
+        }
+    });
+
+    /** 
+     * Test nested keys in array objects
+     */
+
+    /**
+     * Test nested keys missing in array objects
+     */
+
+    /**
+     * Test deeply nested keys missing in array objects
+     */
+
 });
