@@ -1,2 +1,6 @@
 foo: Hello
-bar: World
+bar: 
+  foo_deep: World
+  bar_deep: Check
+  dive: 
+    foo: Dive
