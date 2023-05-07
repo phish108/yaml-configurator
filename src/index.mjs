@@ -74,11 +74,60 @@ function mergeConfig(config, defaults = {}) {
     }, config);
 }
 
-function verifyConfig(config, keys = []) {
-    keys.forEach((k) => { 
-        if (!(k in config)) {
-            throw new Error(`missing configuration for key: ${k}`);
+function keycheck(config, key) {
+    if (typeof config !== "object" || config === null || config === undefined) {
+        throw new Error(`missing configuration object for key: ${key}})`);
+    }
+
+    if (!(key in config && config[key] !== undefined && config[key] !== null || config[key] === "")) {
+        throw new Error(`missing configuration for key: ${key}`);
+    }
+
+    return config[key];
+}
+
+function checkArrayItem(config, key) {
+    let result = {};
+    
+    try {
+        result = check(config, key);
+    }
+    catch (err) {   
+        return err;
+    }
+
+    return result;
+}
+
+function check(config, key) {
+    if (Array.isArray(config)) {
+        const potentials = config.map((cfg) => checkArrayItem(cfg, key));
+        const matches = potentials.filter((e) => !(e instanceof Error));
+
+        if (potentials.length === 0 || matches.length === 0) {
+            throw new Error(`missing configuration object for key: ${key}`);
         }
-    });
-    return config;
+
+        return matches.flat();
+    }
+
+    return keycheck(config, key);
+}
+
+function verifyConfig(config, keys = []) {
+    return keys.reduce((cfg, k) => { 
+        const klist = k.split(".");
+
+        try {
+            klist.reduce((c, subkey) => check(c, subkey), cfg); 
+        }
+        catch (err) {
+            if (klist.length > 1) {
+                throw new Error(`${err.message} (in ${k})`);
+            }
+            throw err;
+        }
+
+        return cfg;
+    }, config);
 }
