@@ -14,7 +14,7 @@ npm i @phish108/yaml-configurator
 In the index module: 
 
 ```js
-import * as Config from "./ConfigReader.mjs";
+import * as Config from "@phish108/yaml-configurator";
 
 // load from the first location that matches.
 const cfg = await Config.readConfig(
@@ -49,7 +49,7 @@ foo:
 The following code verifies that the `bar`-property in the `foo`-category is set. 
 
 ```js 
-await readConfig("/etc/app/config.yaml", ["foo.bar"]);
+await Config.readConfig("/etc/app/config.yaml", ["foo.bar"]);
 ```
 
 If any key in this chain is an array, then `readConfig()` will ckeck if the key is set at least once in one object in that array. Let's expand the above example to illustrate this behavior. 
@@ -63,7 +63,7 @@ foo:
 The code will still return the configuration as the second object in the list satisfies the following verification chain. 
 
 ```js 
-await readConfig("/etc/app/config.yaml", ["foo.bar"]);
+await Config.readConfig("/etc/app/config.yaml", ["foo.bar"]);
 ```
 
 If any key in the verification chain is missing `readConfig()` adds the failing chain to the error message. 
