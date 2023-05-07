@@ -10,7 +10,11 @@ const fileContent = {
         dive: {
             foo: "Dive"
         }
-    }
+    },
+    arr: [
+        { foo: "bar", bar: { foo: "baz"}},
+        { baz: "foo", qux: { foo: "bar"}, bar: {baz: "baz"}}
+    ]
 };
 
 describe("Test config reader with nested key checks", async () => {
@@ -119,15 +123,65 @@ describe("Test config reader with nested key checks", async () => {
     });
 
     /** 
+     * Test keys in array objects
+     */
+    it("check keys in array objects early match", async () => {
+        const result = await readConfig(config, ["arr.foo"]);
+        assert.deepStrictEqual(result, fileContent);
+    });
+
+    it("check keys in array objects late match", async () => {
+        const result = await readConfig(config, ["arr.baz"]);
+        assert.deepStrictEqual(result, fileContent);
+    });
+
+    /** 
      * Test nested keys in array objects
      */
+    it("check keys in array objects early match", async () => {
+        const result = await readConfig(config, ["arr.bar.foo"]);
+        assert.deepStrictEqual(result, fileContent);
+    });
+
+    it("check keys in array objects late match", async () => {
+        const result = await readConfig(config, ["arr.bar.baz"]);
+        assert.deepStrictEqual(result, fileContent);
+    });
+
+    it("check keys in array objects late match", async () => {
+        const result = await readConfig(config, ["arr.qux.foo"]);
+        assert.deepStrictEqual(result, fileContent);
+    });
 
     /**
      * Test nested keys missing in array objects
      */
+    it("nested keys missing in array objects", async () => {
+        try {
+            const result = await readConfig(config, ["arr.bug"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
+
+            assert.strictEqual(e.message, "missing configuration object for key: bug (in arr.bug)");
+        }
+    });
 
     /**
      * Test deeply nested keys missing in array objects
      */
+    it("deeply nested keys missing in array objects", async () => {
+        try {
+            const result = await readConfig(config, ["arr.bar.bug"]);
+            assert.fail("Should have thrown an error");
+        } catch (e) {
+            if (e instanceof assert.AssertionError) {
+                throw e;
+            }
 
+            assert.strictEqual(e.message, "missing configuration object for key: bug (in arr.bar.bug)");
+        }
+    });
 });

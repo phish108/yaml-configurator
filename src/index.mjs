@@ -86,14 +86,40 @@ function keycheck(config, key) {
     return config[key];
 }
 
+function checkArrayItem(config, key) {
+    let result = {};
+    
+    try {
+        result = check(config, key);
+    }
+    catch (err) {   
+        return err;
+    }
+
+    return result;
+}
+
+function check(config, key) {
+    if (Array.isArray(config)) {
+        const potentials = config.map((cfg) => checkArrayItem(cfg, key));
+        const matches = potentials.filter((e) => !(e instanceof Error));
+
+        if (potentials.length === 0 || matches.length === 0) {
+            throw new Error(`missing configuration object for key: ${key}`);
+        }
+
+        return matches.flat();
+    }
+
+    return keycheck(config, key);
+}
+
 function verifyConfig(config, keys = []) {
     return keys.reduce((cfg, k) => { 
         const klist = k.split(".");
 
         try {
-            klist.reduce((c, subkey) => {    
-                return keycheck(c, subkey);
-            }, cfg); 
+            klist.reduce((c, subkey) => check(c, subkey), cfg); 
         }
         catch (err) {
             if (klist.length > 1) {

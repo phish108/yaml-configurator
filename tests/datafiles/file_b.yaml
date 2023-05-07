@@ -4,3 +4,12 @@ bar:
   bar_deep: Check
   dive: 
     foo: Dive
+arr:
+- foo: bar
+  bar: 
+    foo: baz
+- baz: foo
+  qux: 
+    foo: bar
+  bar: 
+    baz: baz
