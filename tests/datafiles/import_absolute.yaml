@@ -1,0 +1,2 @@
+test:
+  import: file:///tests/datafiles/file_a.yaml
