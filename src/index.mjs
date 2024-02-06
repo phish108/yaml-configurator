@@ -55,6 +55,9 @@ function mergeConfig(config, defaults = {}) {
         defaults = {};
     }
 
+    if (typeof defaults !== "object") {
+        return config;
+    }
     if (!config || typeof config !== "object" || Object.keys(config).length === 0) {
         return defaults;
     }
@@ -70,6 +73,10 @@ function mergeConfig(config, defaults = {}) {
             acc[k] = defaults[k];
         }
         
+        if (typeof acc[k] === "object" && !Array.isArray(acc[k])) {
+            acc[k] = mergeConfig(acc[k], defaults[k]);
+        }
+
         return acc; 
     }, config);
 }

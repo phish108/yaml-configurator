@@ -4,7 +4,7 @@
   "description": "handler for loading YAML configuration files",
   "main": "src/index.mjs",
   "scripts": {
-    "test": "node --test tests"
+    "test": "node --test tests/test-*"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/phish108/yaml-configurator#readme",
   "dependencies": {
-    "yaml": "2.2.2"
+    "yaml": "2.3.4"
   }
 }
