@@ -4,7 +4,7 @@
   "description": "handler for loading YAML configuration files",
   "main": "src/index.mjs",
   "scripts": {
-    "test": "node --test tests"
+    "test": "node --test tests/test-*"
   },
   "repository": {
     "type": "git",
