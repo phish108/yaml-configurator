@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/phish108/yaml-configurator#readme",
   "dependencies": {
-    "yaml": "2.2.2"
+    "yaml": "2.3.4"
   }
 }
